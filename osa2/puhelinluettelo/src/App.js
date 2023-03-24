@@ -1,33 +1,33 @@
-import { useState } from "react";
+import { useState , useEffect} from "react";
+import Persons from "./components/Persons";
+import PersonForm from "./components/PersonForm";
+import Filter from "./components/Filter";
+import PersonServices from "./services/persons";
 
 const App = () => {
-  const [persons, setPersons] = useState([
-    { name: "Arto Hellas", number: "040-123456" },
-    { name: "Ada Lovelace", number: "39-44-5323523" },
-    { name: "Dan Abramov", number: "12-43-234345" },
-    { name: "Mary Poppendieck", number: "39-23-6423122" },
-  ]);
+  const [persons, setPersons] = useState([]);
   const [newName, setNewName] = useState("");
   const [newNumber, setNewNumber] = useState("");
   const [newFilter, setNewFilter] = useState("");
 
+  useEffect(() => {
+    PersonServices.getAll().then(persons => {
+      setPersons(persons)
+    })
+  }, [])
+  
+
   const handleNameChange = (event) => {
     setNewName(event.target.value);
   };
-
   const handleNumberChange = (event) => {
     setNewNumber(event.target.value);
   };
-
-  /*TODO fix this atm this just deletes other values*/
   const handleFilterChange = (event) => {
     setNewFilter(event.target.value);
-    const filtered = () =>
-      persons.filter((x) => x.name.match(RegExp(newFilter, "i")));
-    setPersons(filtered);
   };
 
-  const addName = (event) => {
+  const addPerson = (event) => {
     event.preventDefault();
     //TODO figure out if there is better way to do this
     if (persons.some((x) => x.name === newName)) {
@@ -37,32 +37,41 @@ const App = () => {
     const nameObject = {
       name: newName,
       number: newNumber,
+      id: persons.length + 1
     };
-
+    PersonServices.create(nameObject);
     setPersons(persons.concat(nameObject));
     setNewName("");
+    setNewNumber("");
   };
+
+  const deletePerson = (event) => {
+    const filteredPerson = persons.filter(person => person.id === event)
+    if (window.confirm(`Delete ${filteredPerson[0].name} ?`)) {
+      PersonServices.remove(filteredPerson[0].id)
+    }
+    //Updates list after delete there is probably better way to do this
+    setPersons(persons.filter(person => person.id !== event))
+  };
+
 
   return (
     <div>
       <h2>Phonebook</h2>
-      <div>
-        filter shown with:{" "}
-        <input input value={newFilter} onChange={handleFilterChange} />
-      </div>
-      <h2>add a new</h2>
-      <form>
-        <div>
-          name: <input value={newName} onChange={handleNameChange} />
-        </div>
-        <div>
-          number: <input value={newNumber} onChange={handleNumberChange} />
-        </div>
-        <div>
-          <button onClick={addName}>add</button>
-        </div>
-      </form>
+      <Filter
+        newFilter={newFilter}
+        handleFilterChange={handleFilterChange}
+      ></Filter>
+      <h3>add a new</h3>
+      <PersonForm
+        newName={newName}
+        handleNameChange={handleNameChange}
+        newNumber={newNumber}
+        handleNumberChange={handleNumberChange}
+        addPerson={addPerson}
+      ></PersonForm>
       <h2>Numbers</h2>
+      <Persons persons={persons} newFilter={newFilter} deletePerson={deletePerson}></Persons>
     </div>
   );
 };
