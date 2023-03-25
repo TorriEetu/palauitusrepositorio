@@ -1,22 +1,22 @@
-import { useState , useEffect} from "react";
+import { useState, useEffect } from "react";
 import Persons from "./components/Persons";
 import PersonForm from "./components/PersonForm";
 import Filter from "./components/Filter";
 import PersonServices from "./services/persons";
+import Notification from "./components/Notification";
 
 const App = () => {
   const [persons, setPersons] = useState([]);
   const [newName, setNewName] = useState("");
   const [newNumber, setNewNumber] = useState("");
   const [newFilter, setNewFilter] = useState("");
+  const [notification, setNotification] = useState(null);
 
   useEffect(() => {
-    PersonServices.getAll().then(persons => {
-      setPersons(persons)
-    })
-  }, [])
-  
-
+    PersonServices.getAll().then((persons) => {
+      setPersons(persons);
+    });
+  }, []);
   const handleNameChange = (event) => {
     setNewName(event.target.value);
   };
@@ -29,35 +29,61 @@ const App = () => {
 
   const addPerson = (event) => {
     event.preventDefault();
-    //TODO figure out if there is better way to do this
-    if (persons.some((x) => x.name === newName)) {
-      alert(`${newName} is already added to phonebook`);
-      return;
-    }
     const nameObject = {
       name: newName,
       number: newNumber,
-      id: persons.length + 1
+      id: persons.length + 1,
     };
-    PersonServices.create(nameObject);
-    setPersons(persons.concat(nameObject));
+    const newPerson = persons.filter((x) => x.name === newName);
+    if (newPerson.length !== 0) {
+      if (
+        window.confirm(
+          `${newPerson[0].name} is already added to the phonebook, replace the old number with a new one ?`
+        )) {
+        PersonServices.update(newPerson[0].id, nameObject)
+          .then((returnPerson) => {
+            setPersons(
+              persons.map((person) =>
+                person.id !== newPerson[0].id ? person : returnPerson
+              )
+            );
+            setNotification([`${newName} was successfully updated`, true]);
+          })
+          .catch((error) => {
+            setNotification([
+              `'${newName}' was already deleted from server`,
+              false,
+            ]);
+            setPersons(persons.filter((n) => n.id !== newPerson[0].id));
+          });
+      }
+    } else {
+      PersonServices.create(nameObject)
+        .then((returnPerson) => {
+          setPersons(persons.concat(nameObject));
+          setNotification([`${newName} was successfully added`, true]);
+        })
+        .catch((error) => {
+          setNotification([`${error.response.data.error}`, false]);
+        });
+    }
     setNewName("");
     setNewNumber("");
   };
 
   const deletePerson = (event) => {
-    const filteredPerson = persons.filter(person => person.id === event)
+    const filteredPerson = persons.filter((person) => person.id === event);
     if (window.confirm(`Delete ${filteredPerson[0].name} ?`)) {
-      PersonServices.remove(filteredPerson[0].id)
+      PersonServices.remove(filteredPerson[0].id);
+      setNotification([`${filteredPerson[0].name} was successfully deleted`, true]);
     }
-    //Updates list after delete there is probably better way to do this
-    setPersons(persons.filter(person => person.id !== event))
+    setPersons(persons.filter((person) => person.id !== event));
   };
-
 
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={notification} />
       <Filter
         newFilter={newFilter}
         handleFilterChange={handleFilterChange}
@@ -71,7 +97,11 @@ const App = () => {
         addPerson={addPerson}
       ></PersonForm>
       <h2>Numbers</h2>
-      <Persons persons={persons} newFilter={newFilter} deletePerson={deletePerson}></Persons>
+      <Persons
+        persons={persons}
+        newFilter={newFilter}
+        deletePerson={deletePerson}
+      ></Persons>
     </div>
   );
 };
