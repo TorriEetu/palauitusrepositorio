@@ -67,7 +67,10 @@ const App = () => {
       PersonServices.create(nameObject)
         .then((returnPerson) => {
           setPersons(persons.concat(nameObject));
-          setNotification([`${newName} was successfully added`, true]);
+          setNotification([`${newName} was successfully added`, true])
+          setTimeout(() => {
+            setNotification(null)
+          }, 3000)
         })
         .catch((error) => {
           setNotification([`${error.response.data.error}`, false])
