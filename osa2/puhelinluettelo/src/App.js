@@ -47,13 +47,19 @@ const App = () => {
                 person.id !== newPerson[0].id ? person : returnPerson
               )
             );
-            setNotification([`${newName} was successfully updated`, true]);
+            setNotification([`${newName} was successfully updated`, true])
+            setTimeout(() => {
+              setNotification(null)
+            }, 3000)
           })
           .catch((error) => {
             setNotification([
               `'${newName}' was already deleted from server`,
               false,
-            ]);
+            ])
+            setTimeout(() => {
+              setNotification(null)
+            }, 3000)
             setPersons(persons.filter((n) => n.id !== newPerson[0].id));
           });
       }
@@ -64,8 +70,13 @@ const App = () => {
           setNotification([`${newName} was successfully added`, true]);
         })
         .catch((error) => {
-          setNotification([`${error.response.data.error}`, false]);
-        });
+          setNotification([`${error.response.data.error}`, false])
+          setTimeout(() => {
+            setNotification(null)
+          }, 3000)
+        }
+        );
+        
     }
     setNewName("");
     setNewNumber("");
@@ -75,7 +86,10 @@ const App = () => {
     const filteredPerson = persons.filter((person) => person.id === event);
     if (window.confirm(`Delete ${filteredPerson[0].name} ?`)) {
       PersonServices.remove(filteredPerson[0].id);
-      setNotification([`${filteredPerson[0].name} was successfully deleted`, true]);
+      setNotification([`${filteredPerson[0].name} was successfully deleted`, true])
+      setTimeout(() => {
+        setNotification(null)
+      }, 3000)
     }
     setPersons(persons.filter((person) => person.id !== event));
   };
