@@ -16,8 +16,7 @@ const CountryData = ({ countries, setCountries, filter }) => {
       <ul>
         {filtered.map((filteredMaps) => (
           <li key={filteredMaps.name}>
-            {" "}
-            {filteredMaps.name}{" "}
+            {" "}{filteredMaps.name}{" "}
             <button onClick={() => setCountries([filteredMaps])}>show</button>
           </li>
         ))}
