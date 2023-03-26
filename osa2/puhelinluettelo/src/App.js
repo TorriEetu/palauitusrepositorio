@@ -32,7 +32,6 @@ const App = () => {
     const nameObject = {
       name: newName,
       number: newNumber,
-      id: persons.length + 1,
     };
     const newPerson = persons.filter((x) => x.name === newName);
     if (newPerson.length !== 0) {
@@ -60,7 +59,7 @@ const App = () => {
             setTimeout(() => {
               setNotification(null)
             }, 3000)
-            setPersons(persons.filter((person) => person.id !== event));
+            setPersons(persons.filter((n) => n.id !== newPerson[0].id));
           });
       }
     } else {
