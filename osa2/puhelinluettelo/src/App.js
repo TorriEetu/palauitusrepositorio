@@ -60,7 +60,7 @@ const App = () => {
             setTimeout(() => {
               setNotification(null)
             }, 3000)
-            setPersons(persons.filter((n) => n.id !== newPerson[0].id));
+            setPersons(persons.filter((person) => person.id !== event));
           });
       }
     } else {
