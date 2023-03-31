@@ -7,6 +7,13 @@ const Blog = require('../models/blog')
 
 const api = supertest(app)
 describe('Get information about blog', () => {
+  beforeEach(async () => {
+    await Blog.deleteMany({})
+    helper.initialBlogs.forEach(async (blog) => {
+      const blogObject = new Blog(blog)
+      await blogObject.save()
+    })
+  })
   test('notes are returned as json', async () => {
     await api
       .get('/api/blogs')
@@ -55,7 +62,6 @@ describe('posting of a blog', () => {
 
     const allBlogs = await helper.blogsInDb()
     const addedBlog = await allBlogs.find(blog => blog.title === 'This value should be 0')
-    console.log(addedBlog)
     expect(addedBlog.likes).toBe(0)
   })
 

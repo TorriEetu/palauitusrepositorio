@@ -1,18 +1,11 @@
 const blogRouter = require('express').Router()
 const Blog = require('../models/blog')
+const User = require('../models/user')
 
 
-blogRouter.delete('/:id', async (request, response , next) => { 
-  try {
-    await Blog.findByIdAndRemove(request.params.id)
-    response.status(204).end()
-  } catch (exception) {
-    next(exception)
-  }
-})
+blogRouter.get('/', async (request, response) => {
+  const blogs = await Blog.find({}).populate('user', { username: 1, name: 1 })
 
-blogRouter.get('/', async (request, response) => { 
-  const blogs = await Blog.find({})
   response.json(blogs)
 })
 
@@ -21,18 +14,31 @@ blogRouter.post('/', async (request, response , next) => {
   if (body.likes === undefined) {
     body.likes = 0
   }
-    
+  const user = await User.findById(body.userId)
+  
   const blog = new Blog({
     title: body.title,
     author: body.author,
     url: body.url,
-    likes: body.likes
+    likes: body.likes,
+    user: user._id
   })
   //express-async-errors dosent seem to work
   try {
     const savedBlog = await blog.save()
+    user.blogs = user.blogs.concat(savedBlog._id)
+    await user.save()
     response.status(201).json(savedBlog)    
   } catch(exception) {
+    next(exception)
+  }
+})
+
+blogRouter.delete('/:id', async (request, response , next) => { 
+  try {
+    await Blog.findByIdAndRemove(request.params.id)
+    response.status(204).end()
+  } catch (exception) {
     next(exception)
   }
 })
