@@ -1,5 +1,6 @@
 const blogRouter = require('express').Router()
 const Blog = require('../models/blog')
+const middleware = require('../utils/middleware')
 
 
 blogRouter.get('/', async (request, response) => {
@@ -8,7 +9,7 @@ blogRouter.get('/', async (request, response) => {
   response.json(blogs)
 })
 
-blogRouter.post('/', async (request, response , next) => {
+blogRouter.post('/', middleware.userExtractor, async (request, response , next) => {
   const body = request.body
   if (body.likes === undefined) {
     body.likes = 0
@@ -35,7 +36,7 @@ blogRouter.post('/', async (request, response , next) => {
   }
 })
 
-blogRouter.delete('/:id', async (request, response , next) => { 
+blogRouter.delete('/:id', middleware.userExtractor , async (request, response , next) => { 
   const user = request.user
   const blogToDelete = await Blog.findById(request.params.id)
 
