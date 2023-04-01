@@ -3,30 +3,85 @@ const supertest = require('supertest')
 const helper = require('./test_helper')
 const app = require('../app')
 const Blog = require('../models/blog')
+const User = require('../models/user')
 
+
+
+beforeEach(async () => {
+  await User.deleteMany({})
+  await Blog.deleteMany({})
+})
 
 const api = supertest(app)
 describe('Get information about blog', () => {
+  let headers
   beforeEach(async () => {
-    await Blog.deleteMany({})
-    helper.initialBlogs.forEach(async (blog) => {
-      const blogObject = new Blog(blog)
-      await blogObject.save()
-    })
+    const newUser = {
+      username: 'test',
+      name: 'test',
+      password: 'test123',
+    }
+
+    await api
+      .post('/api/users')
+      .send(newUser)
+
+    const result = await api
+      .post('/api/login')
+      .send(newUser)
+
+    headers = {
+      'Authorization': `Bearer ${result.body.token}`
+    }
   })
+
   test('notes are returned as json', async () => {
     await api
       .get('/api/blogs')
+      .set(headers)
       .expect(200)
       .expect('Content-Type', /application\/json/)
   })
   test('blog posts is _id by default', async () => {
+    const blog = {
+      title: 'Go To Statement Considered Harmful',
+      author: 'Edsger W. Dijkstra',
+      url: 'http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html',
+      likes: 5,
+    }
+
+    await api
+      .post('/api/blogs')
+      .send(blog)
+      .set(headers)
+      .expect(201)
+      .expect('Content-Type', /application\/json/)
+
     const blogs = await Blog.find({})
     expect(blogs[0]._id).toBeDefined()
   })})
 
 describe('posting of a blog', () => {
+  let headers
+  beforeEach(async () => {
+    const newUser = {
+      username: 'test',
+      name: 'test',
+      password: 'test123',
+    }
 
+    await api
+      .post('/api/users')
+      .send(newUser)
+
+    const result = await api
+      .post('/api/login')
+      .send(newUser)
+
+    headers = {
+      'Authorization': `Bearer ${result.body.token}`
+    }
+  })
   test('a valid blog can be added ', async () => {
     const blog = {
       title: 'Go To Statement Considered Harmful',
@@ -40,6 +95,7 @@ describe('posting of a blog', () => {
     await api
       .post('/api/blogs')
       .send(blog)
+      .set(headers)
       .expect(201)
       .expect('Content-Type', /application\/json/)
 
@@ -58,6 +114,7 @@ describe('posting of a blog', () => {
       .post('/api/blogs')
       .send(blog)
       .expect(201)
+      .set(headers)
       .expect('Content-Type', /application\/json/)
 
     const allBlogs = await helper.blogsInDb()
@@ -73,15 +130,52 @@ describe('posting of a blog', () => {
     await api
       .post('/api/blogs')
       .send(blog)
+      .set(headers)
       .expect(400)
   })})
 
 describe('deletion of a blog', () => {
+  let headers
+  let newUser
+  beforeEach(async () => {
+    newUser = {
+      username: 'test',
+      name: 'test',
+      password: 'test123',
+    }
+
+    await api
+      .post('/api/users')
+      .send(newUser)
+
+    const result = await api
+      .post('/api/login')
+      .send(newUser)
+
+    headers = {
+      'Authorization': `Bearer ${result.body.token}`
+    }
+  })
   test('succeeds with status code 204 if id is valid', async () => {
+    const newBlog = {
+      title:'Updated blog',
+      author:'Nobody',
+      url:'http://www.cs.utexas.edu/~EWD/transcriptions/EWD08xx/EWD808.html',
+      likes:120,
+      User: newUser
+    }
+    await api
+      .post('/api/blogs/')
+      .send(newBlog)
+      .set(headers)
+      .expect(201)
+
     const blogsAtStart = await helper.blogsInDb()
     const blogToDelete = blogsAtStart[0]
+
     await api
       .delete(`/api/blogs/${blogToDelete.id}`)
+      .set(headers)
       .expect(204)
 
     const blogsAtEnd = await helper.blogsInDb()
@@ -93,18 +187,39 @@ describe('deletion of a blog', () => {
 })
 
 describe('update of a blog', () => {
+  let headers
+  beforeEach(async () => {
+    const newUser = {
+      username: 'test',
+      name: 'test',
+      password: 'test123',
+    }
+
+    await api
+      .post('/api/users')
+      .send(newUser)
+
+    const result = await api
+      .post('/api/login')
+      .send(newUser)
+
+    headers = {
+      'Authorization': `Bearer ${result.body.token}`
+    }
+  })
   test('Blog should update successfully ', async () => {
 
     const newBlog = {
       title:'Updated blog',
       author:'Nobody',
       url:'http://www.cs.utexas.edu/~EWD/transcriptions/EWD08xx/EWD808.html',
-      likes:120
+      likes:120,
     }
 
     await api
       .post('/api/blogs')
       .send(newBlog)
+      .set(headers)
       .expect(201)
 
     const allBlogs = await helper.blogsInDb()
@@ -117,6 +232,7 @@ describe('update of a blog', () => {
     await api
       .put(`/api/blogs/${blogToUpdate.id}`)
       .send(updatedBlog)
+      .set(headers)
       .expect(200)
 
     const blogsAtEnd = await helper.blogsInDb()

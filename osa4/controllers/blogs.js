@@ -1,6 +1,5 @@
 const blogRouter = require('express').Router()
 const Blog = require('../models/blog')
-const User = require('../models/user')
 
 
 blogRouter.get('/', async (request, response) => {
@@ -14,7 +13,9 @@ blogRouter.post('/', async (request, response , next) => {
   if (body.likes === undefined) {
     body.likes = 0
   }
-  const user = await User.findById(body.userId)
+
+  const user = request.user
+
   
   const blog = new Blog({
     title: body.title,
@@ -35,12 +36,20 @@ blogRouter.post('/', async (request, response , next) => {
 })
 
 blogRouter.delete('/:id', async (request, response , next) => { 
-  try {
-    await Blog.findByIdAndRemove(request.params.id)
-    response.status(204).end()
-  } catch (exception) {
-    next(exception)
+  const user = request.user
+  const blogToDelete = await Blog.findById(request.params.id)
+
+  if (user._id.toString() === blogToDelete.user._id.toString()) {
+    try {
+      await Blog.findByIdAndRemove(request.params.id)
+      response.status(204).end()
+    } catch (exception) {
+      next(exception)
+    }   
+  } else {
+    return response.status(401).json({ error: 'Unauthorized' })
   }
+
 })
 
 blogRouter.put('/:id', async (request, response , next) => {
