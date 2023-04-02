@@ -12,27 +12,19 @@ const success = {
   font_size: 32,
 }
 
-const Notification = ({ errorMessage, successMessage }) => {
-  if (successMessage === null && errorMessage === null) {
+const Notification = ({ message }) => {
+  if (message === null) {
     return null
-  } else if (successMessage){
-    return (
-      <div id='success' style={success}>
-        {successMessage}
-      </div>
-    )
-  } else {
-    return (
-      <div id='error' style={error}>
-        {errorMessage}
-      </div>
-    )
   }
+  if (message.includes('error')) {
+    return <div className="error" style={error}>{message.substring(5)}</div>
+  }
+
+  return <div className="success" style={success}>{message}</div>
 }
 
 Notification.propTypes = {
-  errorMessage: PropTypes.string,
-  successMessage: PropTypes.string
+  message: PropTypes.string,
 }
 
 export default Notification

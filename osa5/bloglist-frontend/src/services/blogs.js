@@ -16,7 +16,7 @@ const getAll = async () => {
   return response.data
 }
 
-const create = async newObject => {
+const create = async (newObject) => {
   const response = await axios.post(baseUrl, newObject, config)
   return response.data
 }
