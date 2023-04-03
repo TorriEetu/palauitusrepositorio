@@ -28,7 +28,6 @@ export const initializeAnecdotes = () => {
     dispatch(setAnecdotes(anecdotes))
   }
 }
-
 export const voteAnecdote = (anecdote) => {
   return async (dispatch) => {
     const votedAnecdote = await anecdoteService.update(anecdote)
