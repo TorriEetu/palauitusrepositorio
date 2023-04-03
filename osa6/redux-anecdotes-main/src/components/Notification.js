@@ -1,21 +1,8 @@
-import { useEffect } from 'react'
-import { useSelector, useDispatch } from 'react-redux'
-import { setNotification } from '../reducers/notificationReducer'
+import { useSelector } from 'react-redux'
 
 
 const Notification = () => {
-  const dispatch = useDispatch()
   const notification = useSelector((state) => state.notification)
-
-  //Probably really bad way to do this
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      dispatch(setNotification(null))
-    }, 5000)
-    return () => {
-      clearTimeout(timer)
-    }
-  }, [dispatch])
 
   const style = {
     border: 'solid',
