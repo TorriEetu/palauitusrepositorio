@@ -1,24 +1,24 @@
-import { useEffect } from "react"
+import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { setNotification } from '../reducers/notificationReducer'
-import { voteAnecdote, initializeAnecdotes} from "../reducers/anecdoteReducer"
+import { voteAnecdote, initializeAnecdotes } from '../reducers/anecdoteReducer'
 
 
 const AnecdoteList = () => {
   const dispatch = useDispatch()
 
   useEffect(() => {
-    dispatch(initializeAnecdotes());
-  }, [dispatch]);
+    dispatch(initializeAnecdotes())
+  }, [dispatch])
 
   const anecdotes = useSelector(state => {
     if (state.filter.filter === '') {
       return state => state.anecdotes
     }
-    return state.anecdotes.filter((anecdote) => 
-        anecdote.content
-          .toLowerCase()
-          .includes(state.filter.toLowerCase()))
+    return state.anecdotes.filter((anecdote) =>
+      anecdote.content
+        .toLowerCase()
+        .includes(state.filter.toLowerCase()))
   })
 
   const vote = (event) => {

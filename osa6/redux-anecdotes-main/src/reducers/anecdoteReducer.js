@@ -1,16 +1,16 @@
-import { createSlice } from "@reduxjs/toolkit"
+import { createSlice } from '@reduxjs/toolkit'
 import anecdoteService from '../services/anecdotes'
 
 const anecdoteSlice = createSlice({
-  name: "anecdotes",
+  name: 'anecdotes',
   initialState: [],
   reducers: {
     addVote(state, action) {
       const votedAnecdote = action.payload
       const { id } = votedAnecdote
       return state.map((anecdote) =>
-      anecdote.id !== id ? anecdote : votedAnecdote
-    )},
+        anecdote.id !== id ? anecdote : votedAnecdote
+      )},
     addAnecdote (state, action) {
       state.push(action.payload)
     },
