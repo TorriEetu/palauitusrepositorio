@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Routes, Route, Link} from 'react-router-dom'
+import { Routes, Route, Link, useMatch} from 'react-router-dom'
 
 const Menu = () => {
   const padding = {
@@ -24,7 +24,10 @@ const AnecdoteList = ({ anecdotes }) => (
   <div>
     <h2>Anecdotes</h2>
     <ul>
-      {anecdotes.map(anecdote => <li key={anecdote.id} >{anecdote.content}</li>)}
+      {anecdotes.map(anecdote => 
+      <li key={anecdote.id} >
+        <a href={`/anecdotes/${anecdote.id}`}>{anecdote.content}</a>
+      </li>)}
     </ul>
   </div>
 )
@@ -50,6 +53,21 @@ const Footer = () => (
     See <a href='https://github.com/fullstack-hy2020/routed-anecdotes/blob/master/src/App.js'>https://github.com/fullstack-hy2020/routed-anecdotes/blob/master/src/App.js</a> for the source code.
   </div>
 )
+
+function AnecdoteDetails({ anecdote }) {
+  console.log(anecdote)
+  return (
+    <div>
+      <h2>{anecdote.content}</h2>
+      <p>
+        has {anecdote.votes} votes
+      </p>
+      <p>
+        for more info see <a href={anecdote.info}>{anecdote.info}</a>
+      </p>
+    </div>
+  );
+}
 
 const CreateNew = (props) => {
   const [content, setContent] = useState('')
@@ -110,13 +128,15 @@ const App = () => {
 
   const [notification, setNotification] = useState('')
 
+
   const addNew = (anecdote) => {
     anecdote.id = Math.round(Math.random() * 10000)
     setAnecdotes(anecdotes.concat(anecdote))
-  }
+  }  
 
   const anecdoteById = (id) =>
     anecdotes.find(a => a.id === id)
+  
 
   const vote = (id) => {
     const anecdote = anecdoteById(id)
@@ -128,6 +148,8 @@ const App = () => {
 
     setAnecdotes(anecdotes.map(a => a.id === id ? voted : a))
   }
+  const match = useMatch('/anecdotes/:id');
+  const anecdote = match ? anecdotes.find((a) => a.id === Number(match.params.id)) : null;
 
   return (
     <div>
@@ -135,6 +157,7 @@ const App = () => {
       <Menu />
       <Routes>
         <Route path='/' element={ <AnecdoteList anecdotes={anecdotes} />}></Route>
+        <Route path='/anecdotes/:id' element={ <AnecdoteDetails anecdote={anecdote} />}></Route>
         <Route path='/create' element={ <CreateNew addNew={addNew} />} />
         <Route path='/about' element={<About />} />
       </Routes>
