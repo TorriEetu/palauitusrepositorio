@@ -2,15 +2,18 @@ import AnecdoteForm from './components/AnecdoteForm'
 import Notification from './components/Notification'
 import { useQuery , useMutation , useQueryClient} from 'react-query'
 import { getAnecdotes , updateAnecdote } from './services/request'
+import { useNotificationDispatch } from './NotificationCondex'
 
 
 const App = () => {
   const { isLoading, isError, data, error } =  useQuery('anecdotes', getAnecdotes, {retry: false , refetchOnWindowFocus: false})
   const queryClient = useQueryClient()
+  const notificationDispatch = useNotificationDispatch()
   
   const updateAnecdoteMutation = useMutation(updateAnecdote, {
-    onSuccess: () => {
+    onSuccess: (likedAnecdote) => {
       queryClient.invalidateQueries('anecdotes')
+      notificationDispatch({type: '', payload: `anecdote ${likedAnecdote.content} voted`})
     },
   })
 
