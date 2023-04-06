@@ -48,10 +48,10 @@ const App = () => {
 
   useEffect(() => {
     noteService.getAll()
-  }, [noteService])
+  }, [])
   useEffect(() => {
     personService.getAll()
-  }, [personService])
+  }, [])
 
   const handleNoteSubmit = (event) => {
     event.preventDefault()
