@@ -9,13 +9,13 @@ const style = {
 }
 const Notification = () => {
   const dispatch = useNotificationDispatch()
+  const notification = useNotificationValue()
 
   useEffect(() => {
     setTimeout(() => dispatch({ type: '' }),5000)
-  }, [dispatch])
+  }, [dispatch , notification])
 
 
-  const notification = useNotificationValue()
   if (!notification) {
     return null
   }
