@@ -2,10 +2,10 @@ import { createContext, useReducer, useContext } from 'react'
 
 const notificationReducer = (state, action) => {
   switch (action.type) {
-    case '':
-      return action.payload
-    default:
-        return state
+  case '':
+    return action.payload
+  default:
+    return state
   }
 }
 

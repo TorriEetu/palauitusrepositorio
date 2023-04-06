@@ -1,5 +1,5 @@
-import { useEffect } from "react"
-import { useNotificationValue , useNotificationDispatch } from "../NotificationCondex"
+import { useEffect } from 'react'
+import { useNotificationValue , useNotificationDispatch } from '../NotificationCondex'
 
 const style = {
   border: 'solid',
@@ -11,9 +11,9 @@ const Notification = () => {
   const dispatch = useNotificationDispatch()
 
   useEffect(() => {
-    setTimeout(() => dispatch({type: ''}),5000)
+    setTimeout(() => dispatch({ type: '' }),5000)
   }, [dispatch])
-  
+
 
   const notification = useNotificationValue()
   if (!notification) {
