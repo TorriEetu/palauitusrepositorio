@@ -61,9 +61,7 @@ const App = () => {
       if (window.confirm(`Remove blog ${event.title} by ${event.author}`)) {
         await blogService.remove(event.id)
         setBlogs(blogs.filter((blog) => blog.id !== event.id))
-        dispatch(
-          createNotification(`Blog ${event.title} was successfully deleted`, 5)
-        )
+        dispatch(createNotification(`Blog ${event.title} was successfully deleted`, 5))
       }
     } catch (exception) {
       dispatch(createNotification(`Cannot delete blog ${event.title}`, 5))
@@ -86,22 +84,13 @@ const App = () => {
   const updateBlog = async (BlogToUpdate) => {
     try {
       const updatedBlog = await blogService.update(BlogToUpdate)
-      dispatch(
-        createNotification(
-          `Blog ${BlogToUpdate.title} was successfully updated`,
-          5
-        )
-      )
+      dispatch(createNotification(`Blog ${BlogToUpdate.title} was successfully updated`, 5))
       //Makes sure that there is user field after update
       //There is probably better way to do this
       updatedBlog.user = BlogToUpdate.user
-      setBlogs(
-        blogs.map((blog) => (blog.id !== BlogToUpdate.id ? blog : updatedBlog))
-      )
+      setBlogs(blogs.map((blog) => (blog.id !== BlogToUpdate.id ? blog : updatedBlog)))
     } catch (exception) {
-      dispatch(
-        createNotification(`Cannot update blog ${BlogToUpdate.title}`, 5)
-      )
+      dispatch(createNotification(`Cannot update blog ${BlogToUpdate.title}`, 5))
     }
   }
 
@@ -110,7 +99,7 @@ const App = () => {
       <h2>blogs</h2>
       <Notification />
       {!user && (
-        <Togglable buttonLabel="log in" id="ToggleButton">
+        <Togglable buttonLabel='log in' id='ToggleButton'>
           <LoginForm
             username={username}
             setUsername={setUsername}
@@ -124,11 +113,11 @@ const App = () => {
         <div>
           <p>
             {user.name} logged in{' '}
-            <button onClick={handleLogout} type="submit">
+            <button onClick={handleLogout} type='submit'>
               logout
             </button>
           </p>
-          <Togglable buttonLabel="new blog" ref={blogFormRef}>
+          <Togglable buttonLabel='new blog' ref={blogFormRef}>
             <BlogForm createNewBlog={createNewBlog} />
           </Togglable>
           {blogs

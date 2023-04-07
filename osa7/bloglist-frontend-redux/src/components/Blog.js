@@ -43,7 +43,7 @@ const Blog = (props) => {
         </p>
         {blog.user && <p>{blog.user.username}</p>}
         {blog.user.name === props.user.name && (
-          <button id="delete-btn" onClick={remove}>
+          <button id='delete-btn' onClick={remove}>
             delete
           </button>
         )}

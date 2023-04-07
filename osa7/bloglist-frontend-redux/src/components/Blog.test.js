@@ -29,12 +29,7 @@ describe('Blog component tests', () => {
 
   beforeEach(() => {
     component = render(
-      <Blog
-        blog={blog}
-        updateBlog={mockUpdateBlog}
-        removeBlog={mockRemoveBlog}
-        user={tempUser}
-      />
+      <Blog blog={blog} updateBlog={mockUpdateBlog} removeBlog={mockRemoveBlog} user={tempUser} />
     )
   })
 
