@@ -1,3 +1,4 @@
+const { v4: uuidv4 } = require('uuid')
 const { ApolloServer } = require('@apollo/server')
 const { startStandaloneServer } = require('@apollo/server/standalone')
 
@@ -149,11 +150,11 @@ const resolvers = {
   },
   Mutation: {
     addBook: (root, args) => {
-      const newBook = { ...args }
+      const newBook = { ...args, id: uuidv4() }
       books = books.concat(newBook)
       if (!authors.some((a) => a.name === args.author)) {
-        const authorToAdd = { name: args.author }
-        authors = authors.concat(authorToAdd)
+        const newAuthor = { name: args.author, id: uuidv4() }
+        authors = authors.concat(newAuthor)
       }
       return newBook
     },
