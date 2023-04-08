@@ -10,6 +10,7 @@ import BlogList from './components/BlogList'
 import Logout from './components/Logout'
 import Users from './components/Users'
 import User from './components/User'
+import Blog from './components/Blog'
 
 import blogService from './services/blogs'
 import { initializeBlogs } from './reducers/blogReducer'
@@ -50,6 +51,7 @@ const App = () => {
           </Togglable>
           <Routes>
             <Route path='/' element={<BlogList />} />
+            <Route path='/blogs/:id' element={<Blog />} />
             <Route path='/users' element={<Users />} />
             <Route path='/users/:id' element={<User />} />
           </Routes>
