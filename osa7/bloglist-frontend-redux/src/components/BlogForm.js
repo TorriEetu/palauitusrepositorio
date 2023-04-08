@@ -30,7 +30,7 @@ const BlogForm = ({ blogFormRef }) => {
         url: url,
       }
       dispatch(createBlog(createNewBlog))
-      dispatch(createNotification(`a new ${event.title} by ${event.author}`, 5))
+      dispatch(createNotification(`a new ${createNewBlog.title} by ${createNewBlog.author}`, 5))
     } catch (exception) {
       dispatch(createNotification(`Cannot add blog ${event.title}`, 5))
     }
