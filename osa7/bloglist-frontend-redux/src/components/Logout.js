@@ -11,12 +11,12 @@ const Logout = () => {
   }
 
   return (
-    <p>
+    <div style={{ display: 'inline-block' }}>
       {user.name} logged in{' '}
       <button onClick={handleLogout} type='submit'>
         logout
       </button>
-    </p>
+    </div>
   )
 }
 

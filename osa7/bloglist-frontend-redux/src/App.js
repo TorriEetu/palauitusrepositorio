@@ -7,14 +7,14 @@ import LoginForm from './components/LoginForm'
 import Togglable from './components/Togglable'
 import BlogForm from './components/BlogForm'
 import BlogList from './components/BlogList'
-import Logout from './components/Logout'
 import Users from './components/Users'
 import User from './components/User'
 import Blog from './components/Blog'
+import NavigationBar from './components/NavigationBar'
 
-import blogService from './services/blogs'
 import { initializeBlogs } from './reducers/blogReducer'
 import { initializeUsers } from './reducers/userReducer'
+import blogService from './services/blogs'
 
 const App = () => {
   const user = useSelector((state) => state.login)
@@ -36,6 +36,7 @@ const App = () => {
 
   return (
     <div>
+      {user && <NavigationBar />}
       <h2>blogs</h2>
       <Notification />
       {!user && (
@@ -45,7 +46,6 @@ const App = () => {
       )}
       {user && (
         <div>
-          <Logout />
           <Togglable buttonLabel='new blog' ref={blogFormRef}>
             <BlogForm blogFormRef={blogFormRef} />
           </Togglable>
