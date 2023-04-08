@@ -4,9 +4,9 @@ import { initializeBlogs } from '../reducers/blogReducer'
 
 import Blog from '../components/Blog'
 
-const BlogList = ({ user }) => {
+const BlogList = () => {
   const dispatch = useDispatch()
-
+  const user = useSelector((state) => state.login)
   useEffect(() => {
     dispatch(initializeBlogs())
   }, [dispatch])

@@ -4,6 +4,7 @@ import notificationReducer from './reducers/notificationReducer'
 import blogReducer from './reducers/blogReducer'
 import thunk from 'redux-thunk'
 import blogFormReducer from './reducers/blogFormReducer'
+import loggedReducer from './reducers/loginReducer'
 
 const store = configureStore(
   {
@@ -11,6 +12,7 @@ const store = configureStore(
       notification: notificationReducer,
       blogs: blogReducer,
       form: blogFormReducer,
+      login: loggedReducer,
     },
   },
   applyMiddleware(thunk)

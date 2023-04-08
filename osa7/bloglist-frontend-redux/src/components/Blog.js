@@ -1,12 +1,13 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { deleteBlog, voteBlog } from '../reducers/blogReducer'
 import { createNotification } from '../reducers/notificationReducer'
 
 const Blog = (props) => {
   const dispatch = useDispatch()
-  const blog = props.blog
+  const blog = useSelector((state) => state.blogs.find((b) => b.id === props.blog.id))
+  const user = useSelector((state) => state.login)
   const [visible, setVisible] = useState(false)
   const visibilityToggle = { display: visible ? '' : 'none' }
 
@@ -19,6 +20,7 @@ const Blog = (props) => {
       ...blog,
       likes: blog.likes + 1,
     }
+    console.log(updatedBlog)
     try {
       dispatch(voteBlog(updatedBlog))
       dispatch(createNotification(`Blog ${updatedBlog.title} was successfully updated`, 5))
@@ -45,7 +47,7 @@ const Blog = (props) => {
     borderWidth: 1,
     marginBottom: 5,
   }
-  console.log(blog)
+
   return (
     <div style={blogStyle}>
       <div>
@@ -58,7 +60,7 @@ const Blog = (props) => {
           likes {blog.likes} <button onClick={upvote}>like</button>{' '}
         </p>
         {blog.user && <p>{blog.user.username}</p>}
-        {blog.user.name === props.user.name && (
+        {blog.user.name === user.name && (
           <button id='delete-btn' onClick={remove}>
             delete
           </button>
