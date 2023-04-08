@@ -5,6 +5,7 @@ import blogReducer from './reducers/blogReducer'
 import thunk from 'redux-thunk'
 import blogFormReducer from './reducers/blogFormReducer'
 import loggedReducer from './reducers/loginReducer'
+import userReducer from './reducers/userReducer'
 
 const store = configureStore(
   {
@@ -13,6 +14,7 @@ const store = configureStore(
       blogs: blogReducer,
       form: blogFormReducer,
       login: loggedReducer,
+      users: userReducer,
     },
   },
   applyMiddleware(thunk)
