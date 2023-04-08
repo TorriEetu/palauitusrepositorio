@@ -74,4 +74,28 @@ blogRouter.put('/:id', async (request, response, next) => {
   }
 })
 
+blogRouter.post('/:id/comments', async (req, res) => {
+  const blog = await Blog.findById(req.params.id).populate('user', { username: 1, name: 1 })
+  if (!blog) {
+    return res.status(404).json({ error: 'resource does not exist' })
+  }
+
+  const comment = req.body?.comment
+  if (!comment || comment.length === 0) {
+    return res.status(400).json({ error: "comment can't be empty" })
+  }
+
+  blog.comments = blog.comments ? blog.comments.concat(comment) : [comment]
+
+  const updatedBlog = await blog.save()
+
+  res.json(updatedBlog)
+})
+
+blogRouter.get('/:id/comments', async (request, response) => {
+  const { id } = request.params
+  const comments = await Blog.findById(id).populate('comments')
+  response.json(comments)
+})
+
 module.exports = blogRouter

@@ -2,6 +2,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { deleteBlog, voteBlog } from '../reducers/blogReducer'
 import { createNotification } from '../reducers/notificationReducer'
 import { useNavigate, useParams } from 'react-router-dom'
+import Comment from './Comment'
 
 const Blog = () => {
   const { id } = useParams()
@@ -40,7 +41,6 @@ const Blog = () => {
       dispatch(createNotification(`Cannot delete blog ${blog.title}`, 5))
     }
   }
-
   return (
     <div>
       <div>
@@ -56,6 +56,7 @@ const Blog = () => {
           delete
         </button>
       )}
+      <Comment blog={blog} />
     </div>
   )
 }

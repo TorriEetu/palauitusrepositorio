@@ -5,7 +5,7 @@ const NavigationBar = () => {
   const blogStyle = {
     paddingLeft: 10,
     border: 'solid',
-    'background-color': 'lightgrey',
+    backgroundColor: 'lightgrey',
     borderWidth: 1,
     marginBottom: 1,
     display: 'block',
