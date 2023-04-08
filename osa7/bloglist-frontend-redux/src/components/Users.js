@@ -1,3 +1,5 @@
+import Stack from 'react-bootstrap/esm/Stack'
+import Table from 'react-bootstrap/esm/Table'
 import { useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 
@@ -6,14 +8,22 @@ const Users = () => {
   return (
     <div>
       <h4>Blogs created</h4>
-      <ul>
-        {users.map((user) => (
-          <li key={user.id}>
-            <Link to={`/users/${user.id}`}>{user.username}</Link>
-            <p style={{ display: 'inline-block' }}> : {user.blogs.length}</p>
-          </li>
-        ))}
-      </ul>
+      <Stack gap={3}>
+        <Table bordered hover>
+          <tbody>
+            {users.map((user) => (
+              <tr key={user.id}>
+                <td>
+                  <Link to={`/users/${user.id}`}>{user.username}</Link>
+                </td>
+                <td>
+                  <p>{user.blogs.length}</p>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </Table>
+      </Stack>
     </div>
   )
 }

@@ -2,6 +2,8 @@ import { createBlog } from '../reducers/blogReducer'
 import { useDispatch, useSelector } from 'react-redux'
 import { authorChange, titleChange, urlChange } from '../reducers/blogFormReducer'
 import { createNotification } from '../reducers/notificationReducer'
+import Button from 'react-bootstrap/Button'
+import Form from 'react-bootstrap/Form'
 
 const BlogForm = ({ blogFormRef }) => {
   const dispatch = useDispatch()
@@ -36,22 +38,19 @@ const BlogForm = ({ blogFormRef }) => {
   }
 
   return (
-    <form onSubmit={addBlog}>
-      <div>
-        <div>
-          Title: <input id='title' onChange={handleTitleChange} />
-        </div>
-        <div>
-          Author: <input id='author' onChange={handleAuthorChange} />
-        </div>
-        <div>
-          Url: <input id='url' onChange={handleUrlChange} />
-        </div>
-        <div>
-          <button type='submit'>add</button>
-        </div>
+    <Form onSubmit={addBlog}>
+      <Form.Label htmlFor='title'>title</Form.Label>
+      <Form.Control type='title' id='title' onChange={handleTitleChange} />
+      <Form.Label htmlFor='author'>author</Form.Label>
+      <Form.Control type='author' id='author' onChange={handleAuthorChange} />
+      <Form.Label htmlFor='url'>url</Form.Label>
+      <Form.Control type='' id='url' onChange={handleUrlChange} />
+      <div className='d-grid gap-2'>
+        <Button variant='secondary' type='submit'>
+          add
+        </Button>
       </div>
-    </form>
+    </Form>
   )
 }
 

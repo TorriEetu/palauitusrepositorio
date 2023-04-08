@@ -1,6 +1,8 @@
 import { useDispatch } from 'react-redux'
 import React, { useState } from 'react'
 import { createComment } from '../reducers/blogReducer'
+import Form from 'react-bootstrap/Form'
+import ListGroup from 'react-bootstrap/ListGroup'
 
 const Comment = ({ blog }) => {
   const dispatch = useDispatch()
@@ -17,27 +19,27 @@ const Comment = ({ blog }) => {
   return (
     <div>
       <h3>comments</h3>
-      <form onSubmit={handleComment}>
-        <div>
-          <input
-            id='comment'
-            type='text'
-            value={comment}
-            name='comment'
-            onChange={({ target }) => setComment(target.value)}
-          />
-        </div>
+      {comments.length > 0 && (
+        <ListGroup as='ul' variant='flush'>
+          {comments.map((comment, i) => (
+            <ListGroup.Item as='li' key={i}>
+              {comment}
+            </ListGroup.Item>
+          ))}
+        </ListGroup>
+      )}
+      <Form onSubmit={handleComment}>
+        <Form.Group
+          className='mb-3'
+          controlId='exampleForm.ControlTextarea1'
+          onChange={({ target }) => setComment(target.value)}>
+          <Form.Label>Comment</Form.Label>
+          <Form.Control as='textarea' rows={3} />
+        </Form.Group>
         <button id='comment' type='submit'>
           comment
         </button>
-      </form>
-      {comments.length > 0 && (
-        <ul>
-          {comments.map((comment, i) => (
-            <li key={i}>{comment}</li>
-          ))}
-        </ul>
-      )}
+      </Form>
     </div>
   )
 }

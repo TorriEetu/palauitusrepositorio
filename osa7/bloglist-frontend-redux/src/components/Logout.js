@@ -1,5 +1,7 @@
 import { useDispatch, useSelector } from 'react-redux'
 import { userLogout } from '../reducers/loginReducer'
+import Container from 'react-bootstrap/esm/Container'
+import Button from 'react-bootstrap/esm/Button'
 
 const Logout = () => {
   const dispatch = useDispatch()
@@ -11,12 +13,12 @@ const Logout = () => {
   }
 
   return (
-    <div style={{ display: 'inline-block' }}>
+    <Container>
       {user.name} logged in{' '}
-      <button onClick={handleLogout} type='submit'>
+      <Button variant='outline-secondary' onClick={handleLogout} type='submit' size='sm'>
         logout
-      </button>
-    </div>
+      </Button>
+    </Container>
   )
 }
 

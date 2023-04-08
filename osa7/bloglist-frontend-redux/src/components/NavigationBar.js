@@ -1,25 +1,18 @@
-import { Link } from 'react-router-dom'
 import Logout from './Logout'
+import Nav from 'react-bootstrap/Nav'
+import Navbar from 'react-bootstrap/Navbar'
 
 const NavigationBar = () => {
-  const blogStyle = {
-    paddingLeft: 10,
-    border: 'solid',
-    backgroundColor: 'lightgrey',
-    borderWidth: 1,
-    marginBottom: 1,
-    display: 'block',
-  }
   return (
-    <div style={blogStyle}>
-      <Link style={{ paddingRight: 5 }} to={'/'}>
-        blogs
-      </Link>
-      <Link style={{ paddingRight: 5 }} to={'/users'}>
-        users
-      </Link>
-      <Logout />
-    </div>
+    <Navbar expand='lg' variant='light' bg='light'>
+      <Nav className='me-auto'>
+        <Nav.Link href='/'>blogs</Nav.Link>
+        <Nav.Link href='/users'>users</Nav.Link>
+      </Nav>
+      <Nav>
+        <Logout />
+      </Nav>
+    </Navbar>
   )
 }
 export default NavigationBar

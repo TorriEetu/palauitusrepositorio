@@ -3,6 +3,8 @@ import { deleteBlog, voteBlog } from '../reducers/blogReducer'
 import { createNotification } from '../reducers/notificationReducer'
 import { useNavigate, useParams } from 'react-router-dom'
 import Comment from './Comment'
+import Stack from 'react-bootstrap/Stack'
+import Button from 'react-bootstrap/esm/Button'
 
 const Blog = () => {
   const { id } = useParams()
@@ -43,14 +45,19 @@ const Blog = () => {
   }
   return (
     <div>
-      <div>
-        {blog.title} {blog.author}{' '}
-      </div>
-      <p>{blog.url}</p>
-      <p>
-        likes {blog.likes} <button onClick={upvote}>like</button>{' '}
-      </p>
-      {blog.user && <p>added by {blog.user.username}</p>}
+      <Stack gap={0}>
+        <h3>
+          {blog.title} {blog.author}
+        </h3>
+        <p>{blog.url}</p>
+        <p>
+          likes {blog.likes}
+          <Button onClick={upvote} variant='contained'>
+            👍
+          </Button>
+        </p>
+        {blog.user && <p>added by {blog.user.username}</p>}
+      </Stack>
       {blog.user.name === user.name && (
         <button id='delete-btn' onClick={remove}>
           delete
