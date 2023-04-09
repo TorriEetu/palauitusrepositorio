@@ -1,10 +1,16 @@
-const Author = require('./models/author')
-const Book = require('./models/book')
 const { GraphQLError } = require('graphql')
 const { v4: uuidv4 } = require('uuid')
+const jwt = require('jsonwebtoken')
+
+const Author = require('./models/author')
+const Book = require('./models/book')
+const User = require('./models/user')
 
 const resolvers = {
   Query: {
+    me: (root, args, context) => {
+      return context.currentUser
+    },
     authorCount: async () => Author.collection.countDocuments(),
     bookCount: async () => Book.collection.countDocuments(),
     allAuthors: async () => Author.find({}),
@@ -28,25 +34,53 @@ const resolvers = {
   },
   Mutation: {
     //Somehow this code send null author but still works TODO fix it
-    addBook: async (root, args) => {
+    addBook: async (root, args, context) => {
+      const currentUser = context.currentUser
+      if (!currentUser) {
+        throw new GraphQLError('Authentication error', {
+          extensions: {
+            code: 'BAD_USER_INPUT',
+            invalidArgs: args.name,
+            error,
+          },
+        })
+      }
+
+      const book = await Book.findOne({ title: args.title })
       let author = await Author.findOne({ name: args.author })
+
+      if (book) {
+        throw new GraphQLError('Nonunique book', {
+          extensions: {
+            code: 'BAD_USER_INPUT',
+            invalidArgs: args.name,
+            error,
+          },
+        })
+      }
 
       if (!author) {
         author = new Author({ name: args.author })
 
         try {
-          await author.save()
+          await newAuthor.save()
         } catch (error) {
-          throw new UserInputError(error.message, { invalidArgs: args })
+          throw new GraphQLError('Saving author failed', {
+            extensions: {
+              code: 'BAD_USER_INPUT',
+              invalidArgs: args.name,
+              error,
+            },
+          })
         }
       }
       //Error: Cannot return null for non-nullable field Author
       //But this value should never be null
       //This could be code error or query error
-      const book = new Book({ ...args, author: author.id })
+      const newBook = new Book({ ...args, author: author.id })
 
       try {
-        await book.save()
+        await newBook.save()
       } catch (error) {
         throw new GraphQLError('Saving book failed', {
           extensions: {
@@ -57,9 +91,19 @@ const resolvers = {
         })
       }
 
-      return book
+      return newBook
     },
-    editAuthor: async (root, args) => {
+    editAuthor: async (root, args, context) => {
+      const currentUser = context.currentUser
+      if (!currentUser) {
+        throw new GraphQLError('Authentication error', {
+          extensions: {
+            code: 'BAD_USER_INPUT',
+            invalidArgs: args.name,
+            error,
+          },
+        })
+      }
       const author = await Author.findOne({ name: args.name })
 
       if (!author) {
@@ -79,6 +123,37 @@ const resolvers = {
         })
       }
       return author
+    },
+    createUser: async (root, args) => {
+      const user = new User({ username: args.username, favoriteGenre: args.favoriteGenre })
+
+      return user.save().catch((error) => {
+        throw new GraphQLError('Creating the user failed', {
+          extensions: {
+            code: 'BAD_USER_INPUT',
+            invalidArgs: args.name,
+            error,
+          },
+        })
+      })
+    },
+    login: async (root, args) => {
+      const user = await User.findOne({ username: args.username })
+
+      if (!user || args.password !== 'foobar') {
+        throw new GraphQLError('wrong credentials', {
+          extensions: {
+            code: 'BAD_USER_INPUT',
+          },
+        })
+      }
+
+      const userForToken = {
+        username: user.username,
+        id: user._id,
+      }
+
+      return { value: jwt.sign(userForToken, process.env.JWT_SECRET) }
     },
   },
 }
