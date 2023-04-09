@@ -31,6 +31,7 @@ const typeDefs = `
     allAuthors: [Author!]!
     bookCount: Int!
     authorCount: Int!
+    favoriteBook: [Book!]!
     me: User
   }
 

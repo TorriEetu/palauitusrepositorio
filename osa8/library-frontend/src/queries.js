@@ -64,3 +64,18 @@ export const LOGGED_USER = gql`
     }
   }
 `
+
+export const FAVORITE_GENRE = gql`
+  query {
+    favoriteBook {
+      genres
+      published
+      title
+      author {
+        name
+        born
+        bookCount
+      }
+    }
+  }
+`

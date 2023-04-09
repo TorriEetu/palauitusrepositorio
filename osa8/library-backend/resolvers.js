@@ -16,6 +16,11 @@ const resolvers = {
     authorCount: async () => Author.collection.countDocuments(),
     bookCount: async () => Book.collection.countDocuments(),
     allAuthors: async () => Author.find({}),
+    favoriteBook: async (root, args, context) => {
+      const currentUser = context.currentUser
+      const favoriteGenre = currentUser.favoriteGenre
+      return Book.find({ genres: { $in: favoriteGenre } }).populate('author')
+    },
     allBooks: async (root, args) => {
       if (args.author && args.genre) {
         const author = await Author.findOne({ name: args.author })
