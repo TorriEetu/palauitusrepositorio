@@ -14,11 +14,13 @@ const ALL_AUTHORS = gql`
 const ALL_BOOKS = gql`
   query AllBooks {
     allBooks {
-      author
-      genres
-      id
-      published
       title
+      author {
+        name
+      }
+      published
+      id
+      genres
     }
   }
 `

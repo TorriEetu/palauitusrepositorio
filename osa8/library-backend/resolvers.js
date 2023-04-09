@@ -6,6 +6,8 @@ const Author = require('./models/author')
 const Book = require('./models/book')
 const User = require('./models/user')
 
+/*TODO Clean this*/
+
 const resolvers = {
   Query: {
     me: (root, args, context) => {
