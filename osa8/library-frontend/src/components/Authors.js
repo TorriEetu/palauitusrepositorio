@@ -1,9 +1,9 @@
 import { useQuery } from '@apollo/client'
-import queries from '../queries'
+import { ALL_AUTHORS } from '../queries'
 import AuthorForm from './AuthorForm'
 
 const Authors = (props) => {
-  const queryResult = useQuery(queries.ALL_AUTHORS)
+  const queryResult = useQuery(ALL_AUTHORS)
   if (queryResult.loading) {
     return null
   }

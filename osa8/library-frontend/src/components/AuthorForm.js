@@ -1,13 +1,13 @@
 import { useState } from 'react'
 import { useMutation } from '@apollo/client'
-import queries from '../queries'
+import { EDIT_AUTHOR, ALL_AUTHORS } from '../queries'
 
 function AuthorForm({ authors }) {
   const [author, setAuthor] = useState('')
   const [born, setBorn] = useState('')
 
-  const [changeBorn] = useMutation(queries.EDIT_AUTHOR, {
-    refetchQueries: [{ query: queries.ALL_AUTHORS }],
+  const [changeBorn] = useMutation(EDIT_AUTHOR, {
+    refetchQueries: [{ query: ALL_AUTHORS }],
   })
 
   function editAuthor(event) {

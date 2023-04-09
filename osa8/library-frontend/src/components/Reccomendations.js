@@ -1,9 +1,9 @@
 import { useQuery } from '@apollo/client'
-import queries from '../queries'
+import { ALL_BOOKS, LOGGED_USER } from '../queries'
 
 const Reccomendations = (props) => {
-  const queryResult = useQuery(queries.ALL_BOOKS)
-  const userQueryResult = useQuery(queries.LOGGED_USER)
+  const queryResult = useQuery(ALL_BOOKS)
+  const userQueryResult = useQuery(LOGGED_USER)
 
   if (queryResult.loading) {
     return null

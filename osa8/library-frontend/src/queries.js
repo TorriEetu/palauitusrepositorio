@@ -64,4 +64,3 @@ export const LOGGED_USER = gql`
     }
   }
 `
-export default { ADD_BOOK, ALL_AUTHORS, ALL_BOOKS, EDIT_AUTHOR, LOGIN, LOGGED_USER }
