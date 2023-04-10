@@ -6,6 +6,9 @@ const Author = require('./models/author')
 const Book = require('./models/book')
 const User = require('./models/user')
 
+const { PubSub } = require('graphql-subscriptions')
+const pubsub = new PubSub()
+
 /*TODO Clean this*/
 
 const resolvers = {
@@ -40,7 +43,6 @@ const resolvers = {
     bookCount: async (root) => await Book.find({ author: root.id }).countDocuments(),
   },
   Mutation: {
-    //Somehow this code send null author but still works TODO fix it
     addBook: async (root, args, context) => {
       const currentUser = context.currentUser
       if (!currentUser) {
@@ -84,6 +86,7 @@ const resolvers = {
           },
         })
       }
+      pubsub.publish('BOOK_ADDED', { bookAdded: newBook })
 
       return newBook
     },
@@ -148,6 +151,11 @@ const resolvers = {
       }
 
       return { value: jwt.sign(userForToken, process.env.JWT_SECRET) }
+    },
+  },
+  Subscription: {
+    bookAdded: {
+      subscribe: () => pubsub.asyncIterator(['BOOK_ADDED']),
     },
   },
 }
