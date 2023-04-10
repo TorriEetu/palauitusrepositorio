@@ -53,18 +53,7 @@ const resolvers = {
         })
       }
 
-      const book = await Book.findOne({ title: args.title })
       let author = await Author.findOne({ name: args.author })
-
-      if (book) {
-        throw new GraphQLError('Nonunique book', {
-          extensions: {
-            code: 'BAD_USER_INPUT',
-            invalidArgs: args.name,
-            error,
-          },
-        })
-      }
 
       if (!author) {
         author = new Author({ name: args.author })
@@ -81,11 +70,9 @@ const resolvers = {
           })
         }
       }
-      //Error: Cannot return null for non-nullable field Author
-      //But this value should never be null
-      //This could be code error or query error
-      const newBook = new Book({ ...args, author: author.id })
-
+      console.log(author)
+      const newBook = new Book({ ...args, author: author })
+      console.log(newBook)
       try {
         await newBook.save()
       } catch (error) {
