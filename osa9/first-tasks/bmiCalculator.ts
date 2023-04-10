@@ -1,8 +1,9 @@
+/*
 interface BmiArgs {
     height: number
     weight: number
 }
-
+*/
 function categorize(bmi: number) {
     if (bmi < 16) 
         return 'Underweight (Severe thinness)'
@@ -21,11 +22,13 @@ function categorize(bmi: number) {
     return 'Obese (Class III) '
 }
     
-function calculateBmi (height:number , weight:number) {
+export function calculateBmi (height:number , weight:number) {
     console.log(height)
     height = (height / 100.0)
     return categorize(weight / (height ** 2))
 }
+
+/*
 function parseArgsBmi(args: Array<string>): BmiArgs {
     if (args.length < 2)
         throw(new Error('not enough arguments'))
@@ -47,3 +50,4 @@ function parseArgsBmi(args: Array<string>): BmiArgs {
 
 const bmiArgs = parseArgsBmi(process.argv.splice(2))
 console.log(calculateBmi(bmiArgs.height, bmiArgs.weight))
+*/
