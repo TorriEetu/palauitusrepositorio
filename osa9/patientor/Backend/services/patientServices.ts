@@ -1,8 +1,6 @@
-import express from "express";
-import { Patient, patientWithoutSsn } from "../types/patient";
+import { Patient, patientWithoutSsn, NewPatient} from "../types/patient";
 import patientsData from "../data/patients";
-
-const patientRouter = express.Router();
+import { v1 as uuid } from 'uuid';
 
 export const getPatients = (): Array<Patient> => {
     return patientsData;
@@ -19,8 +17,9 @@ export const getPatientsWihoutSsn = (): Array<patientWithoutSsn> => {
     );
 };
 
-patientRouter.get('/' , async (_request:any, response:any) => {
-    response.send(getPatientsWihoutSsn());
-}) 
-
-export default patientRouter;
+export const addPatient = (patient: NewPatient): Patient => {
+    const id = uuid();
+    const newPatient = { id, ...patient };
+    patientsData.push(newPatient);
+    return newPatient;
+};
