@@ -1,12 +1,12 @@
-import React from 'react'
-import ReactDOM from 'react-dom/client'
 import { ApolloClient, InMemoryCache, ApolloProvider, createHttpLink, split } from '@apollo/client'
 import { setContext } from '@apollo/client/link/context'
-import App from './App'
-
 import { getMainDefinition } from '@apollo/client/utilities'
 import { GraphQLWsLink } from '@apollo/client/link/subscriptions'
 import { createClient } from 'graphql-ws'
+import React from 'react'
+import ReactDOM from 'react-dom/client'
+import App from './App'
+
 
 const authLink = setContext((_, { headers }) => {
   const token = localStorage.getItem('library-user-token')
