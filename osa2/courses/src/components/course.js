@@ -28,13 +28,13 @@ const Total = (props) => {
 const Course = (props) => {
   return (
     <div>
-      <Header parts={"Web development curriculum"} />
+      <Header parts={'Web development curriculum'} />
       {props.course.map((course) => (
-          <div key={course.id}>
-              <Header parts={course.name} />
-              <Content parts={course.parts} />
-              <Total parts={course.parts} />
-          </div>
+        <div key={course.id}>
+          <Header parts={course.name} />
+          <Content parts={course.parts} />
+          <Total parts={course.parts} />
+        </div>
       ))}
     </div>
   );

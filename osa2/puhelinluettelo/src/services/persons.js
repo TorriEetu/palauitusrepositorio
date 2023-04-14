@@ -1,28 +1,24 @@
-import axios from 'axios'
-const baseUrl = '/persons'
+import axios from 'axios';
+const baseUrl = '/persons';
 
 const getAll = async () => {
-  const request = axios.get(baseUrl)
-  const response = await request
-  return response.data
-}
+  const request = await axios.get(baseUrl);
+  return request.data;
+};
 
-const create = async newObject => {
-  const request = axios.post(baseUrl, newObject)
-  const response = await request
-  return response.data
-}
+const create = async (newObject) => {
+  const request = await axios.post(baseUrl, newObject);
+  return request.data;
+};
 
 const update = async (id, newObject) => {
-  const request = axios.put(`${baseUrl}/${id}`, newObject)
-  const response = await request
-  return response.data
-}
+  const request = await axios.put(`${baseUrl}/${id}`, newObject);
+  return request.data;
+};
 
-const remove = async id => {
-  const request = axios.delete(`${baseUrl}/${id}`)
-  const response = await request
-  return response.data
-}
+const remove = async (id) => {
+  const request = await axios.delete(`${baseUrl}/${id}`);
+  return request.data;
+};
 
-export default { getAll, create, update, remove }
+export default { getAll, create, update, remove };
