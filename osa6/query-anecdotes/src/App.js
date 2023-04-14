@@ -1,12 +1,14 @@
 import AnecdoteForm from './components/AnecdoteForm'
 import Notification from './components/Notification'
-import { useQuery , useMutation , useQueryClient } from 'react-query'
-import { getAnecdotes , updateAnecdote } from './services/request'
+import { useQuery, useMutation, useQueryClient } from 'react-query'
+import { getAnecdotes, updateAnecdote } from './services/request'
 import { useNotificationDispatch } from './NotificationCondex'
 
-
 const App = () => {
-  const { isLoading, isError, data, error } =  useQuery('anecdotes', getAnecdotes, { retry: false , refetchOnWindowFocus: false })
+  const { isLoading, isError, data, error } = useQuery('anecdotes', getAnecdotes, {
+    retry: false,
+    refetchOnWindowFocus: false,
+  })
   const queryClient = useQueryClient()
   const notificationDispatch = useNotificationDispatch()
 
@@ -27,8 +29,7 @@ const App = () => {
   const anecdotes = data
 
   const handleVote = (anecdote) => {
-    const votes = anecdote.votes + 1
-    updateAnecdoteMutation.mutate({ ...anecdote, votes })
+    updateAnecdoteMutation.mutate({ ...anecdote, votes: anecdote.votes + 1 })
   }
 
   return (
@@ -38,17 +39,17 @@ const App = () => {
       <Notification />
       <AnecdoteForm />
 
-      {anecdotes.sort((a , b) => b.votes - a.votes).map(anecdote =>
-        <div key={anecdote.id}>
-          <div>
-            {anecdote.content}
+      {anecdotes
+        .sort((a, b) => b.votes - a.votes)
+        .map((anecdote) => (
+          <div key={anecdote.id}>
+            <div>{anecdote.content}</div>
+            <div>
+              has {anecdote.votes}
+              <button onClick={() => handleVote(anecdote)}>vote</button>
+            </div>
           </div>
-          <div>
-            has {anecdote.votes}
-            <button onClick={() => handleVote(anecdote)}>vote</button>
-          </div>
-        </div>
-      )}
+        ))}
     </div>
   )
 }
