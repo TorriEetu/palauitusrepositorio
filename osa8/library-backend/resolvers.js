@@ -18,13 +18,7 @@ const resolvers = {
     },
     authorCount: async () => Author.collection.countDocuments(),
     bookCount: async () => Book.collection.countDocuments(),
-    allAuthors: async (root, args) => {
-      console.log(root);
-      const author = await Author.find({});
-      console.log(author);
-      //bookCount: async (root) => await Book.find({ author: root.id }).countDocuments(),
-      return author;
-    },
+    allAuthors: async (root, args) => await Author.find({}),
     favoriteBook: async (root, args, context) => {
       const currentUser = context.currentUser;
       const favoriteGenre = currentUser.favoriteGenre;
@@ -43,6 +37,11 @@ const resolvers = {
         return Book.find({ genres: { $in: args.genre } }).populate('author');
       }
       return Book.find({}).populate('author');
+    },
+  },
+  Author: {
+    bookCount: (root, args, context) => {
+      return context.bookLoader.load(root._id);
     },
   },
   Mutation: {

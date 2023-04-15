@@ -17,6 +17,8 @@ const typeDefs = require('./schema');
 const resolvers = require('./resolvers');
 
 const User = require('./models/user');
+const bookLoader = require('./loaders');
+
 mongoose.set('debug', true);
 
 console.log(process.env.MONGODB_URI);
@@ -68,7 +70,7 @@ const start = async () => {
         if (auth && auth.startsWith('Bearer ')) {
           const decodedToken = jwt.verify(auth.substring(7), process.env.JWT_SECRET);
           const currentUser = await User.findById(decodedToken.id);
-          return { currentUser };
+          return { currentUser, bookLoader };
         }
       },
     })
