@@ -14,11 +14,9 @@ const DiaryEntry = () => {
     void fetchDiaryEntries();
   }, []);
 
-  const title = 'Diary entries';
-
   return (
     <div>
-      <Title title={title}></Title>
+      <Title title='Diary entries'></Title>
       {diaries.map((p) => (
         <div key={p.id}>
           <h4>{p.date} </h4>

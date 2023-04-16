@@ -20,3 +20,5 @@ export interface DiaryEntryProps {
   visibility: Visibility;
   comment: string;
 }
+
+export type DiaryEntryFormValues = Omit<DiaryEntryProps, 'id'>;
