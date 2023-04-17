@@ -1,6 +1,6 @@
 import { Diagnose } from './diagnose';
 
-interface BaseEntry {
+export interface BaseEntry {
   id: string;
   description: string;
   date: string;
@@ -8,40 +8,52 @@ interface BaseEntry {
   diagnosisCodes?: Array<Diagnose['code']>;
 }
 
-enum HealthCheckRating {
+export enum HealthCheckRating {
   'Healthy' = 0,
   'LowRisk' = 1,
   'HighRisk' = 2,
   'CriticalRisk' = 3,
 }
 
-interface HealthCheckEntry extends BaseEntry {
+export interface HealthCheckEntry extends BaseEntry {
   type: 'HealthCheck';
   healthCheckRating: HealthCheckRating;
 }
 
-interface Discharge {
+export interface Discharge {
   date: string;
   criteria: string;
 }
 
-interface HospitalEntry extends BaseEntry {
+export interface HospitalEntry extends BaseEntry {
   type: 'Hospital';
   discharge: Discharge;
 }
 
-interface SickLeave {
+export interface SickLeave {
   startDate: string;
   endDate: string;
 }
 
-interface OccupationalHealthcareEntry extends BaseEntry {
+export interface OccupationalHealthcareEntry extends BaseEntry {
   type: 'OccupationalHealthcare';
   employerName: string;
   sickLeave?: SickLeave;
 }
 
 export type Entry = HospitalEntry | OccupationalHealthcareEntry | HealthCheckEntry;
+
+export type NewEntryType = {
+  description: unknown;
+  date: unknown;
+  specialist: unknown;
+  diagnosisCodes: unknown;
+  type: unknown;
+  employerName?: unknown;
+  sickLeave?: unknown;
+  discharge?: unknown;
+  healthCheckRating?: unknown;
+};
 export interface Patient {
   id: string;
   name: string;
@@ -59,4 +71,6 @@ export enum Gender {
 }
 
 export type patientWithoutSsn = Omit<Patient, 'ssn' | 'entries'>;
+type UnionOmit<T, K extends string | number | symbol> = T extends unknown ? Omit<T, K> : never;
+export type NewEntry = UnionOmit<Entry, 'id'>;
 export type NewPatient = Omit<Patient, 'id'>;
