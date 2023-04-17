@@ -1,0 +1,40 @@
+import { useEffect, useState } from 'react';
+import patientService from '../../services/patients';
+import { Patient, Gender } from '../../types';
+import { useParams } from 'react-router-dom';
+import { Box, Typography } from '@mui/material';
+import { Transgender, Female, Male } from '@mui/icons-material/';
+const PatientPage = () => {
+  const [patient, setPatient] = useState<Patient>();
+  const { id } = useParams<{ id?: string }>();
+
+  useEffect(() => {
+    const fetchPatientList = async () => {
+      const patient = await patientService.getById(id);
+      setPatient(patient);
+    };
+    void fetchPatientList();
+  }, []);
+
+  if (patient === undefined) {
+    return <></>;
+  }
+
+  const getPatientGenderIcon = (gender: Gender) => {
+    if (gender === Gender.Male) return <Male />;
+    if (gender === Gender.Female) return <Female />;
+    return <Transgender />;
+  };
+
+  return (
+    <Box>
+      <Typography variant='h5'>
+        {patient.name} {getPatientGenderIcon(patient.gender)}
+      </Typography>
+      <div>ssh: {patient.ssn}</div>
+      <div>occupation: {patient.occupation}</div>
+    </Box>
+  );
+};
+
+export default PatientPage;
