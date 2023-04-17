@@ -16,6 +16,8 @@ import { Transgender, Female, Male } from '@mui/icons-material/';
 import EntryDetails from './EntryDetails';
 import AddEntryHospitalForm from './AddEntryHospitalForm';
 import axios from 'axios';
+import AddEntryOccupationalForm from './AddEntryOccupationalForm';
+import AddEntryHealthCheckForm from './AddEntryHealthCheckForm';
 
 interface DiagnoseProps {
   diagnoses: Diagnosis[];
@@ -127,6 +129,16 @@ const PatientPage = ({ diagnoses }: DiagnoseProps) => {
           <AddEntryHospitalForm
             onSubmit={submitNewEntry}
             onCancel={closeModal}></AddEntryHospitalForm>
+        )}
+        {entryType === 'Occupational healthcare' && (
+          <AddEntryOccupationalForm
+            onSubmit={submitNewEntry}
+            onCancel={closeModal}></AddEntryOccupationalForm>
+        )}
+        {entryType === 'Health check' && (
+          <AddEntryHealthCheckForm
+            onSubmit={submitNewEntry}
+            onCancel={closeModal}></AddEntryHealthCheckForm>
         )}
       </Dialog>
     </Box>
