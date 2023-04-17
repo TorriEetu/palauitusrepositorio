@@ -36,7 +36,6 @@ const DiaryForm = () => {
   }, [message]);
 
   const onWeatherChange = (event: React.ChangeEvent<{ value: unknown }>) => {
-    event.preventDefault();
     if (typeof event.target.value === 'string') {
       const value = event.target.value;
       const weather = Object.values(Weather).find((w) => w.toString() === value);
@@ -48,7 +47,6 @@ const DiaryForm = () => {
   };
 
   const onVisibilityChange = (event: React.ChangeEvent<{ value: unknown }>) => {
-    event.preventDefault();
     if (typeof event.target.value === 'string') {
       const value = event.target.value;
       const visibility = Object.values(Visibility).find((v) => v.toString() === value);
@@ -74,27 +72,37 @@ const DiaryForm = () => {
       <form onSubmit={addDiary}>
         <div>
           Date
-          <input value={date} onChange={({ target }) => setDate(target.value)} />
-        </div>
-        <div>
-          Weather
-          <select value={weather} onChange={onWeatherChange}>
-            {weatherOption.map((option) => (
-              <option key={option.label} value={option.value}>
-                {option.label}
-              </option>
-            ))}
-          </select>
+          <input type='date' value={date} onChange={({ target }) => setDate(target.value)} />
         </div>
         <div>
           Visibility
-          <select value={visibility} onChange={onVisibilityChange}>
-            {visibilityOption.map((option) => (
-              <option key={option.label} value={option.value}>
-                {option.label}
-              </option>
-            ))}
-          </select>
+          {visibilityOption.map((option) => (
+            <div key={option.label} style={{ display: 'inline' }}>
+              <input
+                type='radio'
+                value={option.value}
+                name='visibility'
+                onChange={onVisibilityChange}
+                id={option.label}
+              />
+              <label>{option.value}</label>
+            </div>
+          ))}
+        </div>
+        <div>
+          Weather
+          {weatherOption.map((option) => (
+            <div key={option.label} style={{ display: 'inline' }}>
+              <input
+                type='radio'
+                value={option.value}
+                name='weather'
+                onChange={onWeatherChange}
+                id={option.label}
+              />
+              <label>{option.value}</label>
+            </div>
+          ))}
         </div>
         <div>
           Comment
