@@ -32,7 +32,8 @@ patientRouter.post('/:id/entries', (req, res) => {
   try {
     const entryToAdd = createNewEntry(req.body as NewEntryType);
     patient.entries = patient.entries.concat(entryToAdd);
-    return res.status(201).json(entryToAdd);
+    console.log(entryToAdd);
+    return res.status(201).json(patient);
   } catch (error: unknown) {
     if (error instanceof Error) {
       return res.status(400).json({ error: error.message });
