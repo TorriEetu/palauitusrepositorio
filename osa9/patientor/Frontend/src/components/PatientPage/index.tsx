@@ -14,7 +14,7 @@ const PatientPage = () => {
       setPatient(patient);
     };
     void fetchPatientList();
-  }, []);
+  }, [id]);
 
   if (patient === undefined) {
     return <></>;
