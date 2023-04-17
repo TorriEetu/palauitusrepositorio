@@ -1,7 +1,8 @@
 import Title from './title';
 import { Visibility, Weather } from '../types';
-import { SyntheticEvent, useState } from 'react';
+import { SyntheticEvent, useState, useEffect } from 'react';
 import { create } from '../services/diaries';
+import Notification from './notification';
 
 interface WeatherOption {
   value: Weather;
@@ -28,6 +29,11 @@ const DiaryForm = () => {
   const [visibility, setVisibility] = useState(Visibility.Ok);
   const [weather, setWeather] = useState(Weather.Cloudy);
   const [comment, setComment] = useState('');
+  const [message, setMessage] = useState('');
+
+  useEffect(() => {
+    setTimeout(() => setMessage(''), 5000);
+  }, [message]);
 
   const onWeatherChange = (event: React.ChangeEvent<{ value: unknown }>) => {
     event.preventDefault();
@@ -53,14 +59,18 @@ const DiaryForm = () => {
     }
   };
 
-  const addDiary = (event: SyntheticEvent) => {
+  const addDiary = async (event: SyntheticEvent) => {
     event.preventDefault();
-    create({ date, weather, visibility, comment });
+    const foo = await create({ date, weather, visibility, comment });
+    if (typeof foo === 'string') {
+      setMessage(foo);
+    }
   };
 
   return (
     <div>
       <Title title='Add new entry'></Title>
+      <Notification title={message}></Notification>
       <form onSubmit={addDiary}>
         <div>
           Date
