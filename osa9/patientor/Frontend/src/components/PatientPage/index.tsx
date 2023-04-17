@@ -33,6 +33,13 @@ const PatientPage = () => {
       </Typography>
       <div>ssh: {patient.ssn}</div>
       <div>occupation: {patient.occupation}</div>
+      <Typography variant='h6'>entries</Typography>
+      {patient.entries.map((p) => (
+        <div key={p.id}>
+          <div>{p.description}</div>
+          {p.diagnosisCodes && p.diagnosisCodes.map((d) => <li key={d}>{d}</li>)}
+        </div>
+      ))}
     </Box>
   );
 };
